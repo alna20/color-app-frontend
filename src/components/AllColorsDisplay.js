@@ -1,52 +1,57 @@
-// frontend/src/components/AllColorsDisplay.js
 import React from 'react';
-import { useSpring, animated } from 'react-spring';
 
-const AllColorsDisplay = ({ allColors }) => {
-  const fadeIn = useSpring({
-    from: { opacity: 0 },
-    to: { opacity: 1 },
-  });
+const AllColorsDisplay = ({ colorFrequency }) => {
+  // Convert keys to lowercase
+  const lowercaseColorFrequency = Object.fromEntries(
+    Object.entries(colorFrequency).map(([key, value]) => [key.toLowerCase(), value])
+  );
 
   return (
-    <animated.div style={{ ...styles.allColorsContainer, ...fadeIn }}>
-      <h3 style={styles.heading}>All Saved Colors</h3>
-      <div style={styles.colorGrid}>
-        {allColors.map((color, index) => (
-          <animated.div key={index} style={{ ...styles.colorSquare, backgroundColor: color }}>
-            <span style={styles.colorText}>{color}</span>
-          </animated.div>
+    <div style={styles.container}>
+      <h3 style={styles.heading}>Global Favorite Color Board</h3>
+      <div style={styles.colorList}>
+        {Object.entries(lowercaseColorFrequency).map(([color, frequency]) => (
+          <div key={color} style={getCircleStyle(color)}>
+            <div style={styles.colorText}>
+              {color.toUpperCase()} - {frequency}
+            </div>
+          </div>
         ))}
       </div>
-    </animated.div>
+    </div>
   );
 };
 
+const getCircleStyle = (color) => ({
+  ...styles.colorItem,
+  backgroundColor: color,
+  border: color.toLowerCase() === 'white' ? '2px solid black' : 'none',
+});
+
 const styles = {
-  allColorsContainer: {
+  container: {
     marginTop: '20px',
   },
   heading: {
     color: '#333',
   },
-  colorGrid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(80px, 1fr))',
-    gap: '10px',
+  colorList: {
+    display: 'flex',
+    flexWrap: 'wrap',
   },
-  colorSquare: {
-    width: '80px',
-    height: '80px',
-    borderRadius: '10px',
+  colorItem: {
+    width: '100px',
+    height: '100px',
+    margin: '5px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     color: '#fff',
-    fontWeight: 'bold',
-    cursor: 'pointer',
-    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+    borderRadius: '5px',
+    fontSize: '14px',
   },
   colorText: {
+    fontSize: '12px',
     textAlign: 'center',
   },
 };

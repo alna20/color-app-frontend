@@ -10,10 +10,10 @@ const AllColorsDisplay = ({ colorFrequency }) => {
     <div style={styles.container}>
       <h3 style={styles.heading}>Global Favorite Color Board</h3>
       <div style={styles.colorList}>
-        {Object.entries(lowercaseColorFrequency).map(([color, frequency]) => (
-          <div key={color} style={getCircleStyle(color)}>
+        {Object.entries(lowercaseColorFrequency).map(([colorName, colorFrequency]) => (
+          <div key={colorName} style={getCircleStyle(color)}>
             <div style={styles.colorText}>
-              {color.toUpperCase()} - {frequency}
+              {colorName.toUpperCase()} - {colorFrequency}
             </div>
           </div>
         ))}
@@ -22,10 +22,10 @@ const AllColorsDisplay = ({ colorFrequency }) => {
   );
 };
 
-const getCircleStyle = (color) => ({
+const getCircleStyle = (colorName) => ({
   ...styles.colorItem,
-  backgroundColor: color,
-  border: color.toLowerCase() === 'white' ? '2px solid black' : 'none',
+  backgroundColor: colorName,
+  border: colorName.toLowerCase() === 'white' ? '2px solid black' : 'none',
 });
 
 const styles = {

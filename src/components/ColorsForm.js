@@ -15,11 +15,8 @@ const ColorForm = () => {
       // Make a POST request to the backend API
       await axios.post('http://localhost:3001/api/colors/submit-color', { color });
 
-      // Retrieve the saved color
-      const savedColorResponse = await axios.get('http://localhost:3001/api/colors/saved-color');
-      setSavedColor(savedColorResponse.data.color);
+      setSavedColor(color);
 
-      // Fetch all saved colors after submitting a new color
       fetchAllColors();
     } catch (error) {
       console.error('Error submitting color:', error);

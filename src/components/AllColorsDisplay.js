@@ -8,9 +8,7 @@ const AllColorsDisplay = ({ colors }) => {
         {colors.map(({ colorName, colorFrequency }) => (
           <div key={colorName} style={getCircleStyle(colorName)}>
             <div style={getDynamicTextStyle(colorName)}>{colorName.toUpperCase()}</div>
-            <div style={styles.colorFrequency}>
-              {colorFrequency} {colorFrequency === 1 ? 'Vote' : 'Votes'}
-            </div>
+            <div style={getDynamicVoteStyle(colorName)}>{colorFrequency} {colorFrequency === 1 ? 'Vote' : 'Votes'}</div>
           </div>
         ))}
       </div>
@@ -25,9 +23,17 @@ const getCircleStyle = (colorName) => ({
 });
 
 const getDynamicTextStyle = (colorName) => {
-  const isLight = isColorLight(colorName);
+  const textColor = isColorLight(colorName) ? '#333' : '#fff';
   return {
     ...styles.colorText,
+    color: textColor,
+  };
+};
+
+const getDynamicVoteStyle = (colorName) => {
+  const isLight = isColorLight(colorName);
+  return {
+    ...styles.colorFrequency,
     color: isLight ? '#333' : '#fff',
   };
 };
@@ -78,7 +84,6 @@ const styles = {
   },
   colorFrequency: {
     fontSize: '14px',
-    color: '#888',
     textAlign: 'center',
   },
 };

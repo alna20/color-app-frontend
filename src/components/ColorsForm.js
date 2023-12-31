@@ -39,6 +39,7 @@ const ColorForm = () => {
     const fetchData = async () => {
       await fetchAllColors();
     };
+
     fetchData();
 
     const intervalId = setInterval(() => {
@@ -54,7 +55,7 @@ const ColorForm = () => {
       <p style={styles.subHeading}>
         Discover how many others have the same favorite color as you!
       </p>
-      <div style={styles.form}>
+      <div style={styles.formContainer}>
         <label style={styles.label}>What's Your Favorite Color?</label>
         <div style={styles.inputContainer}>
           <input
@@ -99,13 +100,17 @@ const styles = {
     color: '#555',
     marginBottom: '20px',
   },
-  form: {
-    maxWidth: '400px',
-    margin: 'auto',
+  formContainer: {
+    display: 'grid',
+    gridTemplateColumns: 'minmax(0, 1fr)',
+    gap: '20px',
     padding: '20px',
     border: '1px solid #ddd',
     borderRadius: '10px',
     boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
+    width: '100%', // Set the form container to 100% width
+    maxWidth: '800px', // Add a maximum width if needed
+    margin: 'auto', // Center the form container
   },
   label: {
     display: 'block',

@@ -6,12 +6,12 @@ import { API_URL_GET, API_URL_POST, calculateColorFrequency } from './utils';
 const ColorForm = () => {
   const [color, setColor] = useState('');
   const [savedColor, setSavedColor] = useState('');
-  const [colorData, setColorFrequency] = useState([]);
+  const [colorData, setColorData] = useState([]);
 
   const fetchAllColors = async () => {
     try {
       const response = await axios.get(API_URL_GET);
-      setColorFrequency(calculateColorFrequency(response.data));
+      setColorData(calculateColorFrequency(response.data));
     } catch (error) {
       console.error('Error fetching all colors:', error);
     }
@@ -19,53 +19,56 @@ const ColorForm = () => {
 
   const submitColor = async () => {
     try {
-      console.log('Before axios.post');
       await axios.post(API_URL_POST, { color });
-      console.log('After axios.post');
       setSavedColor(color);
       await fetchAllColors();
+      setColor(''); // Clear input after submission
     } catch (error) {
       console.error('Error submitting color:', error.response ? error.response.data : error.message);
     }
   };
-  
 
   useEffect(() => {
     const fetchData = async () => {
       await fetchAllColors();
     };
-  
+
     fetchData();
-  
+
     const intervalId = setInterval(() => {
       fetchData();
     }, 2000);
-  
+
     return () => clearInterval(intervalId);
   }, []);
-  
 
   return (
     <div style={styles.container}>
-      <h2 style={styles.heading}>Color Friends</h2>
-      <h4 style={{ marginTop: -15 }}>
-        Find out how many people have the same favorite color as you!
-      </h4>
+      <h1 style={styles.heading}>Explore Color Connections</h1>
+      <p style={styles.subHeading}>
+        Discover how many others have the same favorite color as you!
+      </p>
       <div style={styles.form}>
-        <label style={styles.label}>Add Favorite Color:</label>
-        <input
-          type="text"
-          value={color}
-          onChange={(e) => setColor(e.target.value)}
-          style={styles.input}
-        />
-        <button onClick={submitColor} style={styles.button}>
-          Find Out!
-        </button>
+        <label style={styles.label}>What's Your Favorite Color?</label>
+        <div style={styles.inputContainer}>
+          <input
+            type="text"
+            value={color}
+            onChange={(e) => setColor(e.target.value)}
+            style={styles.input}
+            placeholder="Enter your favorite color..."
+          />
+          <button
+            onClick={submitColor}
+            style={{ ...styles.button, ...(color && styles.buttonHover) }}
+          >
+            Find Out!
+          </button>
+        </div>
 
         {savedColor && (
           <div style={styles.savedColor}>
-            <strong>Your favorite color is:</strong> {savedColor}
+            <strong>Your vibrant choice:</strong> {savedColor}
           </div>
         )}
         <AllColorsDisplay colors={colorData} />
@@ -74,43 +77,65 @@ const ColorForm = () => {
   );
 };
 
-
 const styles = {
   container: {
     textAlign: 'center',
     padding: '20px',
-  },
-  heading: {
+    fontFamily: 'Arial, sans-serif',
     color: '#333',
   },
+  heading: {
+    fontSize: '2.5rem',
+    marginBottom: '10px',
+  },
+  subHeading: {
+    fontSize: '1rem',
+    color: '#555',
+    marginBottom: '20px',
+  },
   form: {
-    maxWidth: '300px',
+    maxWidth: '400px',
     margin: 'auto',
+    padding: '20px',
+    border: '1px solid #ddd',
+    borderRadius: '10px',
+    boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
   },
   label: {
     display: 'block',
-    marginBottom: '5px',
+    marginBottom: '10px',
     color: '#555',
+    fontSize: '1.2rem',
+  },
+  inputContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    marginBottom: '20px',
   },
   input: {
-    width: '100%',
-    padding: '8px',
-    marginBottom: '10px',
+    flex: '1',
+    padding: '10px',
+    borderRadius: '5px 0 0 5px',
+    border: '1px solid #ccc',
+    outline: 'none',
   },
   button: {
     backgroundColor: '#4CAF50',
     color: 'white',
     padding: '10px',
     border: 'none',
-    borderRadius: '5px',
+    borderRadius: '0 5px 5px 0',
     cursor: 'pointer',
+    outline: 'none',
+    transition: 'background-color 0.3s',
+  },
+  buttonHover: {
+    backgroundColor: '#45a049',
   },
   savedColor: {
     marginTop: '20px',
     color: '#333',
-  },
-  allColorsSection: {
-    marginTop: '30px',
+    fontSize: '1.2rem',
   },
 };
 

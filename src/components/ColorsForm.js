@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import AllColorsDisplay from './AllColorsDisplay';
-import { API_URL_GET, API_URL_POST, calculateColorFrequency } from './utils';
+import { API_URL_GET, API_URL_POST, calculateColorFrequency, isColorInArray } from './utils';
 
 const ColorForm = () => {
   const [color, setColor] = useState('');
@@ -19,10 +19,17 @@ const ColorForm = () => {
 
   const submitColor = async () => {
     try {
-      await axios.post(API_URL_POST, { color });
-      setSavedColor(color);
-      await fetchAllColors();
-      setColor(''); // Clear input after submission
+      const isColorValid = isColorInArray(color);
+      
+      if (isColorValid) {
+        await axios.post(API_URL_POST, { color });
+        setSavedColor(color);
+        await fetchAllColors();
+        setColor('');
+      } else {
+        setColor('');
+        alert("You're exotic! Try a common color.");
+      }
     } catch (error) {
       console.error('Error submitting color:', error.response ? error.response.data : error.message);
     }
@@ -32,7 +39,6 @@ const ColorForm = () => {
     const fetchData = async () => {
       await fetchAllColors();
     };
-
     fetchData();
 
     const intervalId = setInterval(() => {

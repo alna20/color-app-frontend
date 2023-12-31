@@ -18,3 +18,36 @@ export function calculateColorFrequency(colorList) {
   
     return result;
 }
+
+export function isColorInArray(color) {
+    const colors = [
+      'red',
+      'orange',
+      'yellow',
+      'green',
+      'cyan',
+      'blue',
+      'magenta',
+      'purple',
+      'white',
+      'black',
+      'grey',
+      'silver',
+      'pink',
+      'maroon',
+      'brown',
+      'beige',
+      'tan',
+      'peach',
+      'lime',
+      'olive',
+      'turquoise',
+      'teal',
+      'navy blue',
+      'indigo',
+      'violet'
+    ];
+  
+    return colors.includes(color.toLowerCase());
+  }
+  
